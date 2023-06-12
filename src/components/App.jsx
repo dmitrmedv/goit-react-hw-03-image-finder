@@ -1,13 +1,28 @@
+import { Component } from 'react';
 import SearchBar from './Searchbar/';
 import ImageGallery from './ImageGallery';
-import { ThreeDots } from 'react-loader-spinner';
+import ApiService from '../servises/api';
 
-export const App = () => {
-  return (
-    <>
-      <SearchBar></SearchBar>
-      {/* <ImageGallery></ImageGallery> */}
-      {/* <ThreeDots color="#EB5281" /> */}
-    </>
-  );
-};
+const apiService = new ApiService();
+
+export class App extends Component {
+  state = {
+    data: [],
+  };
+
+  fetchImages = searchQuery => {
+    apiService.query = searchQuery;
+    apiService.fetch().then(({ hits }) => this.setState({ data: hits }));
+  };
+
+  render() {
+    return (
+      <>
+        <SearchBar onSubmit={this.fetchImages} />
+        <ImageGallery data={this.state.data} />
+      </>
+    );
+  }
+}
+
+// console.log(ApiService);

@@ -1,7 +1,9 @@
-export default function ImageGalleryItem({ url, name }) {
+import css from './ImageGalleryItem.module.css';
+
+export default function ImageGalleryItem({ data: { webformatURL } }) {
   return (
-    <li class="gallery-item">
-      <img src={url} alt={name} />
+    <li className={css.ImageGalleryItem}>
+      <img src={webformatURL} alt="" className={css.ImageGalleryItemImage} />
     </li>
   );
 }
