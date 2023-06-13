@@ -11,20 +11,25 @@ export default class Modal extends Component {
     }
   };
 
+  backDropClick = event => {
+    if (event.target === event.currentTarget) {
+      this.props.onClose();
+    }
+  };
+
   componentDidMount() {
-    console.log('смонтировали');
     window.addEventListener('keydown', this.hideModal);
   }
 
   componentWillUnmount() {
     window.removeEventListener('keydown', this.hideModal);
-    console.log('размонтировали');
   }
 
   render() {
-    const { onClose, largeImageURL } = this.props;
+    const { backDropClick } = this;
+    const { largeImageURL } = this.props;
     return createPortal(
-      <div className={css.Overlay} onClick={onClose}>
+      <div className={css.Overlay} onClick={backDropClick}>
         <div className={css.Modal}>
           <img src={largeImageURL} alt="" />
         </div>

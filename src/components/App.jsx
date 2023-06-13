@@ -5,7 +5,6 @@ import ImageGallery from './ImageGallery';
 import ApiService from '../servises/api';
 import Button from './Button';
 import Loader from './Loader';
-import Modal from './Modal';
 
 const apiService = new ApiService();
 
