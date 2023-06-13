@@ -13,13 +13,12 @@ export default class apiService {
     image_type: 'photo',
     orientation: 'horizontal',
     per_page: 12,
-    page: `${this.page}`,
   });
 
   async fetch() {
     return axios
       .get(
-        `${BASE_URL}?&key=${API_KEY}&${this.searchParams}&q=${this.searchQuery}`
+        `${BASE_URL}?&key=${API_KEY}&${this.searchParams}&q=${this.searchQuery}&page=${this.page}`
       )
       .then(result => {
         this.incrementPage();
