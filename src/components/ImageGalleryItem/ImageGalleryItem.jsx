@@ -2,8 +2,6 @@ import Modal from 'components/Modal/Modal';
 import css from './ImageGalleryItem.module.css';
 import { Component } from 'react';
 
-// ({ data, toggleModal })
-
 class ImageGalleryItem extends Component {
   state = {
     showModal: false,

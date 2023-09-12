@@ -19,9 +19,15 @@ class Modal extends Component {
     }
   };
 
+  closeOnBackDrop = event => {
+    if (event.target === event.currentTarget) {
+      this.props.toggleModal();
+    }
+  };
+
   render() {
     return createPortal(
-      <div className={css.overlay}>
+      <div className={css.overlay} onClick={this.closeOnBackDrop}>
         <div className={css.modal}>
           <img src={this.props.largeImageURL} alt="" />
         </div>
