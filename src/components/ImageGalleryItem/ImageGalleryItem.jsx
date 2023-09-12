@@ -16,19 +16,22 @@ class ImageGalleryItem extends Component {
   };
 
   render() {
-    return this.props.data.map(({ id, webformatURL, largeImageURL, tags }) => {
-      return (
-        <li className={css.galleryItem} key={id} onClick={this.toggleModal}>
-          <img src={webformatURL} alt={tags} />
-          {this.state.showModal && (
-            <Modal
-              largeImageURL={largeImageURL}
-              toggleModal={this.toggleModal}
-            ></Modal>
-          )}
-        </li>
-      );
-    });
+    return (
+      <li className={css.galleryItem}>
+        <img
+          src={this.props.data.webformatURL}
+          className={css.ImageGalleryItemImage}
+          onClick={this.toggleModal}
+          alt=""
+        />
+        {this.state.showModal && (
+          <Modal
+            largeImageURL={this.props.data.largeImageURL}
+            toggleModal={this.toggleModal}
+          ></Modal>
+        )}
+      </li>
+    );
   }
 }
 
