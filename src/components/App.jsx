@@ -1,5 +1,7 @@
 import Searchbar from './Searchbar/Searchbar';
 import React, { Component } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import PixabayAPI from '../api/pixabay-api.js';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import css from 'App.module.css';
@@ -19,15 +21,16 @@ export class App extends Component {
     if (prevState.query !== this.state.query) {
       pixabayAPI.resetPage();
       pixabayAPI.query = this.state.query;
+      this.setState({ hits: [], showButton: false });
+
       pixabayAPI
         .fetchImages()
         .then(({ data: { hits, totalHits } }) => {
           if (hits.length < 1) {
-            alert('По вашому запиту нічого не знайдено');
+            toast.error('По вашому запиту нічого не знайдено');
             return;
           }
-          alert(`по вашому запиту знайдено ${totalHits} картинок`);
-
+          toast.success(`по вашому запиту знайдено ${totalHits} картинок`);
           if (hits.length >= pixabayAPI.per_page) {
             this.setState({ showButton: true });
           }
@@ -49,7 +52,7 @@ export class App extends Component {
       .fetchImages()
       .then(({ data: { hits } }) => {
         if (hits.length < pixabayAPI.per_page) {
-          alert('кінець...');
+          toast.warn('кінець...');
           this.setState({ showButton: false });
         }
         this.setState(
@@ -66,8 +69,9 @@ export class App extends Component {
     return (
       <div className={css.app}>
         <Searchbar onSubmit={this.onSubmit} />
-        <ImageGallery data={this.state.hits} />
+        <ImageGallery data={this.state.hits} toggleModal={this.toggleModal} />
         {this.state.showButton && <Button loadMore={this.loadMore} />}
+        <ToastContainer autoClose={3000} />
       </div>
     );
   }

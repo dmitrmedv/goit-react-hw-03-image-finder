@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import css from './Searchbar.module.css';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default class Searchbar extends Component {
   state = {
@@ -15,7 +17,7 @@ export default class Searchbar extends Component {
   handleSubmit = event => {
     event.preventDefault();
     if (this.state.query.trim() === '') {
-      return alert('Введіть щось нормальне...');
+      return toast.error('Введіть щось нормальне...');
     }
     this.props.onSubmit(this.state.query);
   };

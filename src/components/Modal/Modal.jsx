@@ -1,12 +1,34 @@
-import React, { Component } from 'react';
 import css from './Modal.module.css';
+import { createPortal } from 'react-dom';
+import { Component } from 'react';
 
-export default class Modal extends Component {
+const modalRoot = document.querySelector('#modal-root');
+
+class Modal extends Component {
+  componentDidMount() {
+    window.addEventListener('keydown', this.escCloseModal);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.escCloseModal);
+  }
+
+  escCloseModal = e => {
+    if (e.code === 'Escape') {
+      this.props.toggleModal();
+    }
+  };
+
   render() {
-    return (
-      <div class={css.overlay}>
-        <div class={css.modal}>{this.props.children}</div>
-      </div>
+    return createPortal(
+      <div className={css.overlay}>
+        <div className={css.modal}>
+          <img src={this.props.largeImageURL} alt="" />
+        </div>
+      </div>,
+      modalRoot
     );
   }
 }
+
+export default Modal;
