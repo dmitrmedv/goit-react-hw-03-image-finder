@@ -16,13 +16,18 @@ export class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.query !== this.state.query) {
+      pixabayAPI.resetPage();
       pixabayAPI.query = this.state.query;
       pixabayAPI
         .fetchImages()
-        .then(
-          ({ data: { hits } }) => this.setState({ hits }),
-          pixabayAPI.changePage()
-        )
+        .then(({ data: { hits } }) => {
+          if (hits.length < 1) {
+            alert('По вашому запиту нічого не знайдено');
+            return;
+          }
+          pixabayAPI.changePage();
+          return this.setState({ hits });
+        })
         .catch(error => console.log(error));
     }
   }
@@ -33,12 +38,26 @@ export class App extends Component {
     });
   };
 
+  loadMore = () => {
+    pixabayAPI
+      .fetchImages()
+      .then(({ data: { hits } }) =>
+        this.setState(
+          prevState => ({
+            hits: [...prevState.hits, ...hits],
+          }),
+          pixabayAPI.changePage()
+        )
+      )
+      .catch(error => console.log(error));
+  };
+
   render() {
     return (
       <div className={css.app}>
         <Searchbar onSubmit={this.onSubmit} />
         <ImageGallery data={this.state.hits} />
-        {this.state.hits.length && <Button />}
+        {!!this.state.hits.length && <Button loadMore={this.loadMore} />}
       </div>
     );
   }
