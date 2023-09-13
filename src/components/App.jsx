@@ -6,6 +6,7 @@ import PixabayAPI from '../api/pixabay-api.js';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import css from 'App.module.css';
 import { Button } from './Button/Button';
+import { Loader } from './Loader/Loader';
 
 const pixabayAPI = new PixabayAPI();
 
@@ -21,13 +22,14 @@ export class App extends Component {
     if (prevState.query !== this.state.query) {
       pixabayAPI.resetPage();
       pixabayAPI.query = this.state.query;
-      this.setState({ hits: [], showButton: false });
+      this.setState({ hits: [], showButton: false, loading: true });
 
       pixabayAPI
         .fetchImages()
         .then(({ data: { hits, totalHits } }) => {
           if (hits.length < 1) {
             toast.error('По вашому запиту нічого не знайдено');
+            this.setState({ loading: false });
             return;
           }
           toast.success(`по вашому запиту знайдено ${totalHits} картинок`);
@@ -35,7 +37,7 @@ export class App extends Component {
             this.setState({ showButton: true });
           }
           pixabayAPI.changePage();
-          return this.setState({ hits });
+          return this.setState({ hits, loading: false });
         })
         .catch(error => console.log(error));
     }
@@ -48,6 +50,7 @@ export class App extends Component {
   };
 
   loadMore = () => {
+    this.setState({ showButton: false, loading: true });
     pixabayAPI
       .fetchImages()
       .then(({ data: { hits } }) => {
@@ -58,6 +61,8 @@ export class App extends Component {
         this.setState(
           prevState => ({
             hits: [...prevState.hits, ...hits],
+            showButton: true,
+            loading: false,
           }),
           pixabayAPI.changePage()
         );
@@ -70,7 +75,9 @@ export class App extends Component {
       <div className={css.app}>
         <Searchbar onSubmit={this.onSubmit} />
         <ImageGallery data={this.state.hits} toggleModal={this.toggleModal} />
+        <></>
         {this.state.showButton && <Button loadMore={this.loadMore} />}
+        {this.state.loading && <Loader />}
         <ToastContainer autoClose={3000} />
       </div>
     );

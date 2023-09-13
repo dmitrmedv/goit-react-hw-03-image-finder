@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import css from './Searchbar.module.css';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { GrSearch } from 'react-icons/gr';
 
 export default class Searchbar extends Component {
   state = {
@@ -27,7 +28,8 @@ export default class Searchbar extends Component {
       <header className={css.searchbar}>
         <form className={css.form} onSubmit={this.handleSubmit}>
           <button type="submit" className={css.button}>
-            <span className={css.buttonLabel}>Search</span>
+            <span className={css.buttonLabel}></span>
+            <GrSearch size={25} />
           </button>
 
           <input
